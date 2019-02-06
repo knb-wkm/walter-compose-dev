@@ -41,5 +41,5 @@ $ vi /etc/ImageMagick-6/policy.xml
 * 容量集計のバッチ
 
 #+begin_src sh
-$ docker-compose exec nodejs bash -c "cd /webapp/server && npm run analyze"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run analyze"
 #+end_src
