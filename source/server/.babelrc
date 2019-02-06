@@ -1,0 +1,9 @@
+{
+  "presets": ["es2015", "flow"],
+  "plugins": [
+    "transform-object-rest-spread",
+    "transform-flow-strip-types",
+    [ "transform-runtime",
+      { "polyfill": false, "regenerator": true } ]
+  ]
+}

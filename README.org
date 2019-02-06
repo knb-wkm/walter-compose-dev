@@ -1,0 +1,45 @@
+* walter-compose-dev
+
+* コンテナ作成
+#+begin_src sh
+$ cd /path/to/repos
+$ docker-compose build
+$ docker-compose up -d
+#+end_src
+
+* 開発用db初期化
+#+begin_src sh
+$ docker-compose exec mongo bash -c "mongo walter --quiet /webapp/jobs/loadTestData.js"
+#+end_src
+
+* 開発用swift初期化
+#+begin_src sh
+$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post test
+#+end_src
+
+* 開発用es初期化
+#+begin_src sh
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch test"
+#+end_src
+* imagemagick設定変更
+
+ファイルのプレビュー機能を有効にするため以下の箇所を変更
+#+begin_src sh
+$ docker-compose exec nodejs bash
+$ vi /etc/ImageMagick-6/policy.xml
+
+@@ -69,6 +69,6 @@
+   <!-- disable ghostscript format types -->
+   <policy domain="coder" rights="none" pattern="PS" />
+   <policy domain="coder" rights="none" pattern="EPS" />
+-  <policy domain="coder" rights="none" pattern="PDF" />
++  <policy domain="coder" rights="read/write" pattern="PDF" />
+   <policy domain="coder" rights="none" pattern="XPS" />
+ </policymap>
+#+end_src
+
+* 容量集計のバッチ
+
+#+begin_src sh
+$ docker-compose exec nodejs bash -c "cd /webapp/server && npm run analyze"
+#+end_src
