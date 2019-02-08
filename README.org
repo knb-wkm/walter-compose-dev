@@ -2,7 +2,10 @@
 
 * コンテナ作成
 #+begin_src sh
-$ cd /path/to/repos
+$ cd /path/to/hogehoge
+$ git clone https://github.com/knb-wkm/walter-compose-dev.git
+$ cd walter-compose-dev
+$ git clone https://github.com/knb-wkm/walter-02.git source
 $ docker-compose build
 $ docker-compose up -d
 #+end_src
