@@ -1,3 +1,4 @@
 [submodule "source"]
 	path = source
 	url = https://github.com/knb-wkm/walter-02
+	ignore = all
