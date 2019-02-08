@@ -34,5 +34,3 @@ server/.vscode/*
 *.code-workspace
 
 .vscode
-
-source
