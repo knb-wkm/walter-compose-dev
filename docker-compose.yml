@@ -53,3 +53,17 @@ services:
       - $KIBANA_PORTS:5601
     environment:
       SERVER_NAME: kibana.walter
+
+  logstash:
+    image: logstash:6.6.0
+    command: bin/logstash -i
+    volumes:
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elastic
+
+  filebeat:
+    build: filebeat
+    volumes:
+      - ./source/server/logs:/usr/share/filebeat/logs

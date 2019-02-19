@@ -1,0 +1,6 @@
+# -- Default settings
+# http.host: "0.0.0.0"
+# xpack.monitoring.elasticsearch.url: http://elasticsearch:9200
+
+http.host: "0.0.0.0"
+xpack.monitoring.enabled: false
