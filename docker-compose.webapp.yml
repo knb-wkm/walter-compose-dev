@@ -1,0 +1,15 @@
+version: "3"
+services:
+  nodejs:
+    build: nodejs
+    command: bash -c "cd /webapp && npm install && npm run serve"
+    volumes:
+      - ./source/server:/webapp
+      - ./source/client:/client
+    ports:
+      - 3333:3333
+    environment:
+      - NODE_ENV=$NODE_ENV
+      - MONGO_HOST_NAME=$MONGO_HOST_NAME
+      - ELASTIC_HOST_NAME=$ELASTIC_HOST_NAME
+      - SWIFT_HOST_NAME=$SWIFT_HOST_NAME
