@@ -7,6 +7,7 @@ services:
       - 27017:27017
     volumes:
       - ./source/server:/webapp
+    restart: always
 
   elastic:
     build: elastic
@@ -17,11 +18,13 @@ services:
       - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     volumes:
       - ./source/server:/webapp
+    restart: always
 
   swift:
     image: morrisjobke/docker-swift-onlyone
     ports:
       - 8080:8080
+    restart: always
 
   kibana:
     image: kibana:6.6.0
@@ -31,3 +34,4 @@ services:
       - 5601:5601
     environment:
       SERVER_NAME: kibana.walter
+    restart: always

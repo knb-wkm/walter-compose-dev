@@ -13,3 +13,4 @@ services:
       - MONGO_HOST_NAME=$MONGO_HOST_NAME
       - ELASTIC_HOST_NAME=$ELASTIC_HOST_NAME
       - SWIFT_HOST_NAME=$SWIFT_HOST_NAME
+    restart: always
