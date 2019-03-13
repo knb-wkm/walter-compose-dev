@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    contextPath: /v1
+spring:
+  jackson:
+    date-format: jp.co.cyberlinks.tsa_client_api.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /api-docs
+settings: 
+  tsa_url: "https://tsa.cyberlinks-timestamp.jp/tsa/ts" #policyId未対応
+  #tsa_url: "http://54.64.22.157:8888/tsa"
+
+  #tsa_url: "http://www.langedge.jp/tsa" #policyId未対応
+  #tsa_url: "http://timestamp.apple.com/ts01"  #policyId対応
+  #tsa_url: "http://timestamp.comodoca.com/rfc3161"  #policyId未対応
+  #tsa_url: "https://tsp.iaik.tugraz.at/tsp/TspRequest"  #policyIdを指定すると、TSA policy wrong for request
+  #tsa_url: "https://ca.signfiles.com/tsa/get.aspx"  #policyId未対応
+  tsa_hash_algorithm: "SHA-256"
+  tsa_req_policy: ""  #policyIdを受け付けるサーバーとそうでないものがある
+  

@@ -17,6 +17,10 @@ services:
       - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
     volumes:
       - ./source/server:/webapp
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
 
   swift:
     image: morrisjobke/docker-swift-onlyone
@@ -35,18 +39,9 @@ services:
       - mongo
       - elastic
       - swift
+      - tsacli
     environment:
       - NODE_ENV=$NODE_ENV
-
-  react:
-    command: bash -c "cd /webapp && npm install && npm start"
-    build: react
-    volumes:
-      - ./source/client:/webapp
-    ports:
-      - $REACT_PORTS:3000
-    depends_on:
-      - nodejs
 
   kibana:
     image: kibana:6.6.0
@@ -56,3 +51,11 @@ services:
       - $KIBANA_PORTS:5601
     environment:
       SERVER_NAME: kibana.walter
+
+  tsacli:
+    build: tsacli
+    command: java -jar tsa_client_api-0.1.0.jar --spring.profiles.active=production
+    volumes:
+      - ./tsacli/tsa_client_api-0.1.0:/app
+    ports:
+      - $TSACLI_PORTS:8080
