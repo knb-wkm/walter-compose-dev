@@ -37,6 +37,7 @@ services:
       - swift
     environment:
       - NODE_ENV=$NODE_ENV
+      - LANG=ja_JP.UTF-8
 
   react:
     command: bash -c "cd /webapp && npm install && npm start"
