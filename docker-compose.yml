@@ -54,8 +54,8 @@ services:
 
   tsacli:
     build: tsacli
-    command: java -jar tsa_client_api-0.1.0.jar --spring.profiles.active=production
+    command: java -Dspring.config.location="application-production.yml" -jar tsa_client_api-0.1.1.jar
     volumes:
-      - ./tsacli/tsa_client_api-0.1.0:/app
+      - ./tsacli/tsa_client_api-0.1.1:/app
     ports:
       - $TSACLI_PORTS:8080
