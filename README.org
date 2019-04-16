@@ -1,8 +1,15 @@
 * walter-compose-dev
 
+* .env修正
+開発者同士、portが当たらないように環境変数を変更
+#+begin_src sh
+$ cd /path/to/project
+$ vi .env
+#+end_src
+
 * コンテナ作成
 #+begin_src sh
-$ cd /path/to/hogehoge
+$ cd /path/to/project
 $ git clone https://github.com/knb-wkm/walter-compose-dev.git
 $ cd walter-compose-dev
 $ git clone https://github.com/knb-wkm/walter-02.git source
@@ -10,22 +17,33 @@ $ docker-compose build
 $ docker-compose up -d
 #+end_src
 
-* 開発用db初期化
+* mongo初期化
 #+begin_src sh
-$ docker-compose exec mongo bash -c "mongo walter --quiet /webapp/jobs/loadTestData.js"
+$ docker-compose exec mongo bash -c "mongo walter --quiet /webapp/jobs/initDatabase.js"
+$ docker-compose exec mongo mongo walter --eval 'db.getName()'
+connecting to: mongodb://127.0.0.1:27017/walter
+MongoDB server version: 3.4.10
+walter
 #+end_src
 
-* 開発用swift初期化
+* オブジェクトストレージ初期化
 #+begin_src sh
-$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post test
+$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post wakayama
+$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing list
+wakayama
 #+end_src
 
-* 開発用es初期化
+* データ作成
+  - add-timestamp-settingはtsaのid, pwを入力する
 #+begin_src sh
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch test"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev wakayama"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-tenant-w:dev wakayama"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev wakayama"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev wakayama"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-timestamp-setting:dev wakayama userxx passxx"
 #+end_src
+
 * imagemagick設定変更
-
 ファイルのプレビュー機能を有効にするため以下の箇所を変更
 #+begin_src sh
 $ docker-compose exec nodejs bash
