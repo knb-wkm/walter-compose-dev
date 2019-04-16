@@ -42,19 +42,10 @@ services:
       - mongo
       - elastic
       - swift
+      - tsacli
     environment:
       - NODE_ENV=$NODE_ENV
       - LANG=ja_JP.UTF-8
-
-  react:
-    command: bash -c "cd /webapp && npm install && npm start"
-    build: react
-    volumes:
-      - ./source/client:/webapp
-    ports:
-      - $REACT_PORTS:3000
-    depends_on:
-      - nodejs
 
   kibana:
     image: kibana:6.6.0
@@ -64,3 +55,11 @@ services:
       - $KIBANA_PORTS:5601
     environment:
       SERVER_NAME: kibana.walter
+
+  tsacli:
+    build: tsacli
+    command: java -Dspring.config.location="application-production.yml" -jar tsa_client_api-0.1.1.jar
+    volumes:
+      - ./tsacli/tsa_client_api-0.1.1:/app
+    ports:
+      - $TSACLI_PORTS:8080
