@@ -59,6 +59,11 @@ $ vi /etc/ImageMagick-6/policy.xml
  </policymap>
 #+end_src
 
+* タイムスタンプアクションを画面上に表示させる方法
+- 管理者(cyber-sa)でログイン
+- ロール管理メニューに移動
+- ロールにタイムスタンプアクションを追加
+
 * 容量集計のバッチ
 
 #+begin_src sh
