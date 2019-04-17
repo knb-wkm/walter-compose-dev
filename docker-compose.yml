@@ -63,3 +63,45 @@ services:
       - ./tsacli/tsa_client_api-0.1.1:/app
     ports:
       - $TSACLI_PORTS:8080
+
+  tika:
+    image: docker-tikaserver-jpn:latest
+    ports:
+      - 19998:9998
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 10.0.0.40
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  kafkarest:
+    image: confluentinc/cp-kafka-rest
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_REST_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_REST_HOST_NAME: "kafkarest"
+      KAFKA_REST_LISTENERS: "http://kafkarest:8082"
+
+  kafkatopicui:
+    image: landoop/kafka-topics-ui
+    depends_on:
+        - kafkarest
+    environment:
+      KAFKA_REST_PROXY_URL: "http://kafkarest:8082"
+      PROXY: "true"
+    ports:
+      - "8000:8000"
