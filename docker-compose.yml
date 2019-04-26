@@ -42,10 +42,39 @@ services:
       - mongo
       - elastic
       - swift
-      - tsacli
+      - tsacli      
+      - tika
+      - kafka
     environment:
       - NODE_ENV=$NODE_ENV
       - LANG=ja_JP.UTF-8
+
+  worker:
+    build: nodejs
+    command: bash -c "cd /webapp && npm install && npm run worker"
+    volumes:
+      - ./source/server:/webapp
+    ports:
+      - 3999
+    depends_on:
+      - mongo
+      - elastic
+      - swift
+      - tika
+      - kafka
+    environment:
+      - NODE_ENV=$NODE_ENV
+      - LANG=ja_JP.UTF-8
+
+  react:
+    command: bash -c "cd /webapp && npm install && npm start"
+    build: react
+    volumes:
+      - ./source/client:/webapp
+    ports:
+      - $REACT_PORTS:3000
+    depends_on:
+      - nodejs
 
   kibana:
     image: kibana:6.6.0
@@ -63,7 +92,7 @@ services:
       - ./tsacli/tsa_client_api-0.1.1:/app
     ports:
       - $TSACLI_PORTS:8080
-
+        
   tika:
     image: docker-tikaserver-jpn:latest
     ports:
@@ -72,36 +101,20 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
-      - "2181:2181"
+      - 12181:2181
 
   kafka:
     image: wurstmeister/kafka
     ports:
-      - "9092:9092"
+      - 29092:9092
     depends_on:
       - zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 10.0.0.40
-      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-
-  kafkarest:
-    image: confluentinc/cp-kafka-rest
-    depends_on:
-      - kafka
-    environment:
-      KAFKA_REST_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_REST_HOST_NAME: "kafkarest"
-      KAFKA_REST_LISTENERS: "http://kafkarest:8082"
-
-  kafkatopicui:
-    image: landoop/kafka-topics-ui
-    depends_on:
-        - kafkarest
-    environment:
-      KAFKA_REST_PROXY_URL: "http://kafkarest:8082"
-      PROXY: "true"
-    ports:
-      - "8000:8000"
+                                                           
