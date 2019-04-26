@@ -115,7 +115,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "tika":1:3"
+      KAFKA_CREATE_TOPICS: "tika:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
                                                            
