@@ -2,11 +2,13 @@ version: "3"
 services:
   mongo:
     image: mongo:3.4.10
-    command: mongod --dbpath /data/db --port 27017
+    command: mongod --dbpath /data/db --logpath=/var/log/mongodb/mongo.log --port 27017
     ports:
       - 27017:27017
     volumes:
       - ./source/server:/webapp
+      - mongo_data:/data/db
+      - mongo_logs:/var/log/mongodb
     restart: always
 
   elastic:
@@ -15,15 +17,19 @@ services:
       - 9200:9200
       - 9300:9300
     environment:
-      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
     volumes:
       - ./source/server:/webapp
+      - elastic_data:/usr/share/elasticsearch/data
+      - elastic_logs:/usr/share/elasticsearch/logs
     restart: always
 
   swift:
     image: morrisjobke/docker-swift-onlyone
     ports:
       - 8080:8080
+    volumes:
+      - swift_data:/srv
     restart: always
 
   kibana:
@@ -35,3 +41,10 @@ services:
     environment:
       SERVER_NAME: kibana.walter
     restart: always
+
+volumes:
+  mongo_data:
+  mongo_logs:
+  elastic_data:
+  elastic_logs:
+  swift_data:
