@@ -124,4 +124,4 @@ services:
       KAFKA_CREATE_TOPICS: "tika:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-                                                           
+                                                          
