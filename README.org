@@ -28,19 +28,18 @@ walter
 
 * オブジェクトストレージ初期化
 #+begin_src sh
-$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post wakayama
+$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post test
 $ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing list
-wakayama
+test
 #+end_src
 
 * データ作成
   - add-timestamp-settingはtsaのid, pwを入力する
 #+begin_src sh
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev wakayama"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-tenant-w:dev wakayama"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev wakayama"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev wakayama"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-timestamp-setting:dev wakayama userxx passxx"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev test"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev test"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev test"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-timestamp-setting:dev test userxx passxx"
 #+end_src
 
 * imagemagick設定変更
