@@ -1,5 +1,4 @@
 FROM ubuntu:latest
-MAINTAINER david@logicalspark.com
 
 ENV TIKA_VERSION 1.20
 ENV TIKA_SERVER_URL https://www.apache.org/dist/tika/tika-server-$TIKA_VERSION.jar
