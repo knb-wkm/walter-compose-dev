@@ -100,7 +100,7 @@ services:
       - ./source/server/logs:/usr/share/filebeat/logs
         
   tika:
-    image: docker-tikaserver-jpn:latest
+    build: tika
     ports:
       - 19998:9998
 

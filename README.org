@@ -34,6 +34,7 @@ test
 #+end_src
 
 * データ作成
+  - add-tenantは、"${テナント名}1"アカウント（管理者）、"${テナント名}2"アカウント（一般）を作成する。パスワードは「test」
   - add-timestamp-settingはtsaのid, pwを入力する
 #+begin_src sh
 $ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev test"
