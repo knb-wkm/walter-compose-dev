@@ -1,7 +1,7 @@
 version: "3"
 services:
   mongo:
-    image: mongo:3.4.10
+    image: mongo:4.0.10
     command: mongod --dbpath /data/db --port 27017
     ports:
       - $MONGO_PORTS:27017
