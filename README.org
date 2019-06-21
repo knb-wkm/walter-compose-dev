@@ -28,19 +28,18 @@ walter
 
 * オブジェクトストレージ初期化
 #+begin_src sh
-$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post test
-$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing list
-test
+$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post [テナント名]
+$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing list [テナント名]
 #+end_src
 
 * データ作成
   - add-tenantは、"${テナント名}1"アカウント（管理者）、"${テナント名}2"アカウント（一般）を作成する。パスワードは「test」
   - add-timestamp-settingはtsaのid, pwを入力する
 #+begin_src sh
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev test"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev test"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev test"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-timestamp-setting:dev test userxx passxx"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev [テナント名]"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev [テナント名]"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev [テナント名]"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run add-timestamp-setting:dev [テナント名] [TSAユーザID] [TSAユーザPASSWORD]"
 #+end_src
 
 * imagemagick設定変更
@@ -63,6 +62,16 @@ $ vi /etc/ImageMagick-6/policy.xml
 - 管理者でログイン
 - ロール管理メニューに移動
 - ロールにタイムスタンプアクションを追加
+
+*NGINX 通信容量制限解放
+　reactにproxyしているディレクティブに以下の記述で容量制限を１Gに変更する。
+
+  client_max_body_size 1000m;
+
+*ユーザ追加について
+　画面からユーザ追加をした場合必ず管理者グループに所属させる必要がある。
+　　TOPフォルダのファイル追加権限がそのグループにしかないため。
+
 
 * 容量集計のバッチ
 
