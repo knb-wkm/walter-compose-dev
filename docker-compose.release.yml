@@ -1,0 +1,93 @@
+version: "3"
+services:
+  mongo:
+    image: mongo:4.0.10
+    command: mongod --dbpath /data/db --logpath=/var/log/mongodb/mongo.log --port 27017
+    ports:
+      - 27017:27017
+    volumes:
+      - ./source/server:/webapp
+      - ./mongo/data:/data/db
+      - ./mongo/logs:/var/log/mongodb
+
+  elastic:
+    build: elastic
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    volumes:
+      - ./source/server:/webapp
+      - ./elastic/config:/usr/share/elasticsearch/config
+      - ./elastic/data:/usr/share/elasticsearch/data
+      - ./elastic/logs:/usr/share/elasticsearch/logs
+
+  swift:
+    image: morrisjobke/docker-swift-onlyone
+    ports:
+      - 8080:8080
+    volumes:
+      - ./swift/data:/srv
+
+  kibana:
+    image: kibana:7.1.1
+    environment:
+      - ELASTICSEARCH_URL=http://elastic:9200
+    volumes:
+      - ./kibana/config:/usr/share/kibana/config
+    ports:
+      - 5601:5601
+    environment:
+      SERVER_NAME: kibana.walter
+
+  nodejs:
+    build: nodejs
+    command: bash -c "cd /webapp && npm install && npm start"
+    volumes:
+      - ./source/server:/webapp
+      - ./source/client:/client
+    ports:
+      - $NODEJS_PORTS:3333
+    depends_on:
+      - mongo
+      - elastic
+      - swift
+      - tsacli      
+    environment:
+      - NODE_ENV=$NODE_ENV
+      - LANG=ja_JP.UTF-8
+
+  react:
+    command: bash -c "cd /webapp && npm install && npm start"
+    build: react
+    volumes:
+      - ./source/client:/webapp
+    ports:
+      - $REACT_PORTS:3000
+    depends_on:
+      - nodejs
+
+  tsacli:
+    build: tsacli
+    command: java -Dspring.config.location="application.yml" -jar tsa_client_api-0.1.2.jar
+    volumes:
+      - ./tsacli/tsa_client_api-0.1.2:/app
+      - ./tsacli/keystore:/app/keystore
+    ports:
+      - $TSACLI_PORTS:8080
+
+  logstash:
+    image: logstash:7.1.1
+    command: bin/logstash -i
+    volumes:
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elastic
+
+  filebeat:
+    build: filebeat
+    volumes:
+      - ./source/server/logs:/usr/share/filebeat/logs
+

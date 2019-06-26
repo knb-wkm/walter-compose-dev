@@ -1,0 +1,2 @@
+cluster.name: "walter02-cluster"
+network.host: 0.0.0.0
