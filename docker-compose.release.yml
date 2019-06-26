@@ -10,6 +10,32 @@ services:
       - ./mongo/data:/data/db
       - ./mongo/logs:/var/log/mongodb
 
+  mongosrd:
+    image: mongo:4.0.10
+    command: mongod --shardsvr --replSet sd1 --dbpath /data/db --logpath=/var/log/mongodb/mongo.log --profile=1 --slowms=-1 --port 27017
+    volumes:
+      - ./mongosrd/data:/data/db
+      - ./mongosrd/logs:/var/log/mongodb
+
+  mongocfg:
+    image: mongo:4.0.10
+    command: mongod --configsvr --replSet cf1 --dbpath /data/db --logpath=/var/log/mongodb/mongo.log --profile=1 --slowms=-1 --port 27017
+    volumes:
+      - ./mongocfg/data:/data/db
+      - ./mongocfg/logs:/var/log/mongodb
+
+  mongos:
+    image: mongo:4.0.10
+    command: mongos --configdb cf1/walter-compose-glico01_mongocfg_1,walter-compose-glico02_mongocfg_1,walter-compose-glico03_mongocfg_1:27017 --port 27017
+    volumes:
+      - ./mongos/data:/data/db
+      - ./walter-02:/webapp
+    ports:
+      - target: 27017
+        published: 27017
+        protocol: tcp
+        mode: host
+
   elastic:
     build: elastic
     ports:
@@ -99,3 +125,8 @@ services:
     volumes:
       - ./source/server/logs:/usr/share/filebeat/logs
 
+
+networks:
+  default:
+    external:
+      name: "walter_overlay"
