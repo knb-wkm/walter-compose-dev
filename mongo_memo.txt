@@ -39,3 +39,14 @@ mongosで実行
 sh.addShard("sd1/walter-compose-glico01_mongosrd_1:27017");
 sh.addShard("sd1/walter-compose-glico02_mongosrd_1:27017");
 sh.addShard("sd1/walter-compose-glico03_mongosrd_1:27017");
+
+
+メモリものすごく食うので
+EC2SWAP
+150  sudo dd if=/dev/zero of=/swapfile bs=1G count=4
+151  chmod 600 /swapfile
+152  mkswap /swapfile
+153  swapon /swapfile
+154  swapon -s
+155  top
+156  vi /etc/fstab
