@@ -1,6 +1,6 @@
 #!/bin/bash
 
-noewdt=`date '+%Y%m%d'`
+nowdt=`date '+%Y%m%d'`
 
 sudo elasticdump  --input=http://localhost:9200/ --output=$  | gzip > ./elastic/backup/backup.json.gz
 sudo docker-compose exec mongo mongodump --port 27017 --out /data/backup
