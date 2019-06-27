@@ -1,0 +1,41 @@
+永続化フォルダを作成する
+mkdir mongosrd
+mkdir mongos
+mkdir mongocfg
+mkdir mongos/data
+mkdir mongos/logs
+mkdir mongosrd/data
+mkdir mongosrd/logs
+mkdir mongocfg/data
+mkdir mongocfg/logs
+
+シャードグループを作成する
+mongosrdサーバで実行
+
+rs.initiate({
+  _id: "cf1",
+  configsvr: true,
+  members: [
+    { _id: 0, host: "walter-compose-glico01_mongocfg_1:27017" },
+    { _id: 1, host: "walter-compose-glico02_mongocfg_1:27017" },
+    { _id: 2, host: "walter-compose-glico03_mongocfg_1:27017" }
+  ]
+});
+
+コンフィググループを作成する
+mongocfgサーバで実行
+
+rs.initiate({
+  _id: "sd1",
+  members: [
+    { _id: 0, host: "walter-compose-glico01_mongosrd_1:27017" },
+    { _id: 1, host: "walter-compose-glico02_mongosrd_1:27017" },
+    { _id: 2, host: "walter-compose-glico03_mongosrd_1:27017" },
+  ]
+});
+
+シャードの登録
+mongosで実行
+sh.addShard("sd1/walter-compose-glico01_mongosrd_1:27017");
+sh.addShard("sd1/walter-compose-glico02_mongosrd_1:27017");
+sh.addShard("sd1/walter-compose-glico03_mongosrd_1:27017");
