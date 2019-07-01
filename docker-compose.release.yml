@@ -63,6 +63,9 @@ services:
       - 8080:8080
     volumes:
       - ./swift/data:/srv
+    networks:
+      default:
+        ipv4_address: 10.0.1.201
 
   kibana:
     image: kibana:7.1.1
@@ -87,7 +90,7 @@ services:
       - mongo
       - elastic
       - swift
-      - tsacli      
+      - tsacli
     environment:
       - NODE_ENV=$NODE_ENV
       - LANG=ja_JP.UTF-8
