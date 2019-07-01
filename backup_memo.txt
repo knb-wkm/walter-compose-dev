@@ -1,0 +1,24 @@
+mongodump --port #{port} -d {database} -c #{collection} --out #{out} --query #{query}
+mongorestore --port #{port} -d #{database} -c {collection} --dir #{(dir|bson)}
+
+
+docker-compose exec mongo mongodump --port 27017 --out /data/backup
+ls mongo/backup/
+admin  walter
+
+
+
+npm install -g elasticdump
+elasticdump --input=http:/my.elasticsearch.server.com:9200/my_index --output=http://localhost:9200/my_index
+
+
+# Backup and index to a gzip using stdout:
+elasticdump  --input=http://localhost:9200/ --output=$  | gzip > ./elastic/backup/backup.json.gz
+docker-compose exec mongo mongodump --port 27017 --out /data/backup
+
+
+curl -sL https://rpm.nodesource.com/setup_12.x | sudo bash -
+sudo yum install nodejs
+npm install -g elasticdump
+sudo npm install -g elasticdump
+elasticdump --input=http://localhost:39200/ --output=$ | gzip > my_index.json.gz

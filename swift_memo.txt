@@ -2,23 +2,23 @@
 cd /etc/swift
 
 swift-ring-builder account.builder create 18 3 1
-swift-ring-builder account.builder add --region 1 --zone 1 --ip 10.0.1.201 --port 6012 --device xvda1 --weight 100
-swift-ring-builder account.builder add --region 1 --zone 2 --ip 10.0.1.202 --port 6012 --device xvda1 --weight 100
-swift-ring-builder account.builder add --region 1 --zone 3 --ip 10.0.1.203 --port 6012 --device xvda1 --weight 100
+swift-ring-builder account.builder add --region 1 --zone 1 --ip 10.0.1.201 --port 6012 --device sdb1 --weight 100
+swift-ring-builder account.builder add --region 1 --zone 2 --ip 10.0.1.202 --port 6012 --device sdb1 --weight 100
+swift-ring-builder account.builder add --region 1 --zone 3 --ip 10.0.1.203 --port 6012 --device sdb1 --weight 100
 swift-ring-builder account.builder
 swift-ring-builder account.builder rebalance
 
 swift-ring-builder container.builder create  18 3 1
-swift-ring-builder container.builder add --region 1 --zone 1 --ip 10.0.1.201 --port 6011 --device xvda1 --weight 100
-swift-ring-builder container.builder add --region 1 --zone 2 --ip 10.0.1.202 --port 6011 --device xvda1 --weight 100
-swift-ring-builder container.builder add --region 1 --zone 3 --ip 10.0.1.203 --port 6011 --device xvda1 --weight 100
+swift-ring-builder container.builder add --region 1 --zone 1 --ip 10.0.1.201 --port 6011 --device sdb1 --weight 100
+swift-ring-builder container.builder add --region 1 --zone 2 --ip 10.0.1.202 --port 6011 --device sdb1 --weight 100
+swift-ring-builder container.builder add --region 1 --zone 3 --ip 10.0.1.203 --port 6011 --device sdb1 --weight 100
 swift-ring-builder container.builder
 swift-ring-builder container.builder rebalance
 
 swift-ring-builder object.builder create 18 3 1
-swift-ring-builder object.builder add --region 1 --zone 1 --ip 10.0.1.201 --port 6010 --device xvda1 --weight 100
-swift-ring-builder object.builder add --region 1 --zone 2 --ip 10.0.1.202 --port 6010 --device xvda1 --weight 100
-swift-ring-builder object.builder add --region 1 --zone 3 --ip 10.0.1.203 --port 6010 --device xvda1 --weight 100
+swift-ring-builder object.builder add --region 1 --zone 1 --ip 10.0.1.201 --port 6010 --device sdb1 --weight 100
+swift-ring-builder object.builder add --region 1 --zone 2 --ip 10.0.1.202 --port 6010 --device sdb1 --weight 100
+swift-ring-builder object.builder add --region 1 --zone 3 --ip 10.0.1.203 --port 6010 --device sdb1 --weight 100
 swift-ring-builder object.builder
 swift-ring-builder object.builder rebalance
 
