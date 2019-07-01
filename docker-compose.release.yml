@@ -26,10 +26,10 @@ services:
 
   mongos:
     image: mongo:4.0.10
-    command: mongos --configdb cf1/walter-compose-glico01_mongocfg_1,walter-compose-glico02_mongocfg_1,walter-compose-glico03_mongocfg_1:27017 --port 27017
+    command: mongos --configdb cf1/walter-compose-glico01_mongocfg_1,walter-compose-glico02_mongocfg_1,walter-compose-glico03_mongocfg_1:27017 --port 27017 --bind_ip 0.0.0.0
     volumes:
       - ./mongos/data:/data/db
-      - ./walter-02:/webapp
+      - ./source/server:/webapp
     ports:
       - target: 27017
         published: 27017
