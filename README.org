@@ -77,6 +77,9 @@ $ vi /etc/ImageMagick-6/policy.xml
   
     ユーザHOMEや共有の概念があいまい？
 
+* reactコンテナの取り扱いについて
+　開発用にコンテナ作成しているだけの物で、本番には必要ない,buildしてnodejs のexpressの参照先に設置しておけば良い
+
 
 * 容量集計のバッチ
 
