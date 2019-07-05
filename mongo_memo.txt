@@ -50,3 +50,6 @@ EC2SWAP
 154  swapon -s
 155  top
 156  vi /etc/fstab
+
+source/server/lib/configs/server.js
+url: "mongodb://walter-compose-glico02_mongos_1,walter-compose-glico01_mongos_1,walter-compose-glico03_mongos_1"

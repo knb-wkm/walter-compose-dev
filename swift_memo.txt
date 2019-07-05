@@ -22,6 +22,9 @@ swift-ring-builder object.builder add --region 1 --zone 3 --ip 10.0.1.203 --port
 swift-ring-builder object.builder
 swift-ring-builder object.builder rebalance
 
+
+source/server/lib/configs/server.js
+ authUrl: "http://10.0.1.202:8080/auth/v1.0",
 result
 
 # swift-ring-builder account.builder create 18 3 1
