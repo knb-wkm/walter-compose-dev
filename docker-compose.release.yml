@@ -64,6 +64,7 @@ services:
     volumes:
       - ./swift/conf:/etc/swift
       - ./swift/data:/srv
+      - ./swift/backup:/backup
     networks:
       default:
         ipv4_address: 10.0.1.201
