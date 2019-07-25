@@ -7,6 +7,8 @@ RUN set -x \
     && apt-get install -y nodejs build-essential git vim \
     && mkdir /webapp
 
+COPY policy.xml /etc/ImageMagick-6/policy.xml
+
 WORKDIR /webapp
 
 CMD ["node"]
