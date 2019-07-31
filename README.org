@@ -29,13 +29,7 @@ walter
 #+end_src
 
 
-~~* オブジェクトストレージ初期化
-#+begin_src sh
-$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post [テナント名]
-$ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing list [テナント名]
-#+end_src~~
-
-* データ作成
+* データ作成とオブジェクトストレージ初期化
   - add-tenant
     - "${テナント名}1"アカウント（管理者）、"${テナント名}2"アカウント（一般）を作成する。パスワードは「test」
     - オブジェクトストレージのテナント名コンテナを追加する
@@ -44,8 +38,6 @@ $ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tes
   - add-timestamp-settingはtsaのid, pwを入力する
 #+begin_src sh
 $ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev [テナント名]"
-~~$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev [テナント名]"~~
-~~$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev [テナント名]"~~
 $ docker-compose exec nodejs bash -c "cd /webapp && npm run add-timestamp-setting:dev [テナント名] [TSAユーザID] [TSAユーザPASSWORD]"
 #+end_src
 
