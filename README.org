@@ -19,26 +19,33 @@ $ docker-compose up -d
 
 * mongo初期化
 #+begin_src sh
-$ docker-compose exec mongo bash -c "mongo walter --quiet /webapp/jobs/initDatabase.js"
+$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-db:dev"
 $ docker-compose exec mongo mongo walter --eval 'db.getName()'
-connecting to: mongodb://127.0.0.1:27017/walter
-MongoDB server version: 3.4.10
+MongoDB shell version v4.0.10
+connecting to: mongodb://127.0.0.1:27017/walter?gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("4caeef21-e424-4197-9aa5-c8772cbd0bd0") }
+MongoDB server version: 4.0.10
 walter
 #+end_src
 
-* オブジェクトストレージ初期化
+
+~~* オブジェクトストレージ初期化
 #+begin_src sh
 $ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing post [テナント名]
 $ docker-compose exec swift swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K testing list [テナント名]
-#+end_src
+#+end_src~~
 
 * データ作成
-  - add-tenantは、"${テナント名}1"アカウント（管理者）、"${テナント名}2"アカウント（一般）を作成する。パスワードは「test」
+  - add-tenant
+    - "${テナント名}1"アカウント（管理者）、"${テナント名}2"アカウント（一般）を作成する。パスワードは「test」
+    - オブジェクトストレージのテナント名コンテナを追加する
+    - init-elasticsearchを行う
+    - re-create-elastic-cacheを行う
   - add-timestamp-settingはtsaのid, pwを入力する
 #+begin_src sh
 $ docker-compose exec nodejs bash -c "cd /webapp && npm run add-tenant:dev [テナント名]"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev [テナント名]"
-$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev [テナント名]"
+~~$ docker-compose exec nodejs bash -c "cd /webapp && npm run init-elasticsearch:dev [テナント名]"~~
+~~$ docker-compose exec nodejs bash -c "cd /webapp && npm run re-create-elastic-cache:dev [テナント名]"~~
 $ docker-compose exec nodejs bash -c "cd /webapp && npm run add-timestamp-setting:dev [テナント名] [TSAユーザID] [TSAユーザPASSWORD]"
 #+end_src
 
