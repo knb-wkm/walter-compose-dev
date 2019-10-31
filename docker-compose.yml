@@ -1,7 +1,7 @@
 version: "3"
 services:
   mongo:
-    image: mongo:4.0.10
+    image: mongo:3.4.10
     command: mongod --dbpath /data/db --port 27017
     ports:
       - $MONGO_PORTS:27017
@@ -42,26 +42,6 @@ services:
       - mongo
       - elastic
       - swift
-      - tsacli      
-      - tika
-      - kafka
-    environment:
-      - NODE_ENV=$NODE_ENV
-      - LANG=ja_JP.UTF-8
-
-  worker:
-    build: nodejs
-    command: bash -c "cd /webapp && npm install && npm run worker"
-    volumes:
-      - ./source/server:/webapp
-    ports:
-      - 3999
-    depends_on:
-      - mongo
-      - elastic
-      - swift
-      - tika
-      - kafka
     environment:
       - NODE_ENV=$NODE_ENV
       - LANG=ja_JP.UTF-8
@@ -71,57 +51,10 @@ services:
     build: react
     volumes:
       - ./source/client:/webapp
+    environment:
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
     ports:
       - $REACT_PORTS:3000
     depends_on:
       - nodejs
 
-  tsacli:
-    build: tsacli
-    command: java -Dspring.config.location="application.yml" -jar tsa_client_api-0.1.2.jar
-    volumes:
-      - ./tsacli/tsa_client_api-0.1.2:/app
-      - ./tsacli/keystore:/app/keystore
-    ports:
-      - $TSACLI_PORTS:8080
-
-  logstash:
-    image: logstash:6.6.0
-    command: bin/logstash -i
-    volumes:
-      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    depends_on:
-      - elastic
-
-  filebeat:
-    build: filebeat
-    volumes:
-      - ./source/server/logs:/usr/share/filebeat/logs
-        
-  tika:
-    build: tika
-    ports:
-      - 19998:9998
-
-  zookeeper:
-    image: wurstmeister/zookeeper
-    ports:
-      - 12181:2181
-
-  kafka:
-    image: wurstmeister/kafka
-    ports:
-      - 29092:9092
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "tika:1:1"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-                                                          
